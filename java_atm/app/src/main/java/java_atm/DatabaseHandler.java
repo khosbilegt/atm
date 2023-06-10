@@ -6,18 +6,38 @@ public class DatabaseHandler {
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost:3306/atm";
 
-    // Database credentials
     static final String USER = "root";
     static final String PASS = "password";
+    
+    public static boolean getMoney(int accountNo, int amount) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM ATM";
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return false;
+    }
     
     public static void init() {
         Connection conn = null;
         Statement stmt = null;
         try {
-            // Register JDBC driver
             Class.forName(JDBC_DRIVER);
-
-            // Open a connection
+            
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
