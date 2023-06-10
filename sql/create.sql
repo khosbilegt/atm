@@ -21,10 +21,3 @@ CREATE TABLE `Transaction`(
     FOREIGN KEY (FromAccountNo) REFERENCES `Account`(AccountNo),
     FOREIGN KEY (ToAccountNo) REFERENCES `Account`(AccountNo)
 );
-
-INSERT INTO ATM(Location)
-VALUES
-    ('Khan-Uul'),
-    ('Chingeltei')
-
-
