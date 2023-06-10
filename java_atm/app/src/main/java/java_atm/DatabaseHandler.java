@@ -35,6 +35,38 @@ public class DatabaseHandler {
         }
     }
     
+    public static boolean isAccountValid(String accountNumber) {
+        Connection conn = null;
+        Statement stmt = null;
+        int valid = 0;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM `Account`\n WHERE AccountNo=";
+            sql += "'" + accountNumber + "';";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                valid++;
+            }
+            
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        if(valid > 0) {
+            return true;
+        }
+        return false;
+    }
+    
     public static boolean getMoney(int accountNo, int amount) {
         Connection conn = null;
         Statement stmt = null;

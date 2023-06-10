@@ -21,3 +21,6 @@ CREATE TABLE `Transaction`(
     FOREIGN KEY (FromAccountNo) REFERENCES `Account`(AccountNo),
     FOREIGN KEY (ToAccountNo) REFERENCES `Account`(AccountNo)
 );
+
+SELECT * FROM `Account`
+WHERE AccountNo='123456789'

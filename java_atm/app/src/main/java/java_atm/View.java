@@ -37,7 +37,7 @@ public class View extends JFrame {
         atmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AtmFrame newWindow = new AtmFrame();
+                AtmView newWindow = new AtmView();
                 newWindow.setVisible(true);
                 dispose();
             }
