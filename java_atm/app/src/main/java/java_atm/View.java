@@ -9,9 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class View extends JFrame {
     public View() {
@@ -24,10 +22,24 @@ public class View extends JFrame {
         JButton accountButton = new JButton();
         accountButton.setText("Бүртгэл үүсгэх");
         accountButton.setPreferredSize(new Dimension(150, 100));
+        accountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AccountView newWindow = new AccountView();
+                newWindow.setVisible(true);
+                dispose();
+            }
+        });
         
         JButton atmButton = new JButton();
         atmButton.setText("ATM");
         atmButton.setPreferredSize(new Dimension(150, 100));
+        atmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
         
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(accountButton);

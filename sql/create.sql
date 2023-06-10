@@ -1,11 +1,4 @@
 # Create Tables
-CREATE TABLE Customer(
-    CustomerID INT NOT NULL AUTO_INCREMENT,
-    `Name` VARCHAR(255),
-    AccountNo INT,
-    PRIMARY KEY(CustomerID)
-);
-
 CREATE TABLE ATM(
     ATMID INT NOT NULL AUTO_INCREMENT,
     Location VARCHAR(255),
@@ -13,8 +6,9 @@ CREATE TABLE ATM(
 );
 
 CREATE TABLE `Account`(
-    AccountNo INT NOT NULL AUTO_INCREMENT,
+    AccountNo CHAR(9) NOT NULL,
     Balance INT,
+    Pin CHAR(4),
     PRIMARY KEY(AccountNo)
 );
 
