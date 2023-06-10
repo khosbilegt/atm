@@ -9,6 +9,32 @@ public class DatabaseHandler {
     static final String USER = "root";
     static final String PASS = "password";
     
+    public static void createAccount(String accountNo, String balance, String pin) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "INSERT INTO `Account`(AccountNo, Balance, Pin)\nVALUES(";
+            sql += "'" + accountNo + "', " + balance;
+            sql += ", '" + pin + "');";
+            
+            System.out.println(sql);
+            
+            int rs = stmt.executeUpdate(sql);
+            
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+    
     public static boolean getMoney(int accountNo, int amount) {
         Connection conn = null;
         Statement stmt = null;
