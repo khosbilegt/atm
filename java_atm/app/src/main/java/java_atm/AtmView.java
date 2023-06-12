@@ -4,6 +4,7 @@ public class AtmView extends javax.swing.JFrame {
 
     String accountNumber = "";
     String pin = "";
+    int mode = -1;
     
     public AtmView() {
         initComponents();
@@ -57,16 +58,17 @@ public class AtmView extends javax.swing.JFrame {
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 50));
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText(" ");
+        jLabel2.setText("           ");
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText(" ");
+        jLabel3.setText("           ");
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText(" ");
+        jLabel4.setText("           ");
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText(" ");
+        jLabel5.setText("           ");
+        jLabel5.setToolTipText("");
 
         jLabel6.setForeground(new java.awt.Color(250, 10, 10));
         jLabel6.setText(" ");
@@ -84,9 +86,9 @@ public class AtmView extends javax.swing.JFrame {
                         .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(jLabel4))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
@@ -425,18 +427,52 @@ public class AtmView extends javax.swing.JFrame {
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
+        if(mode < 0) {
+            return;
+        }
+        if(mode == 1) {
+            jLabel1.setText("Та юу хийх вэ?:");
+            jTextField1.setText("");
+            jLabel6.setText("");
+            jLabel2.setText("Үлдэгдэл шалгах");
+            jLabel3.setText("Орлого хийх");
+            jLabel4.setText("Шилжүүлэг хийх");
+            jLabel5.setText("Бэлэн мөнгө авах");
+            mode = 0;
+            return;
+        }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
+        if(mode < 0) {
+            return;
+        }
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
+        if(mode < 0) {
+            return;
+        }
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
         // TODO add your handling code here:
+        if(mode < 0) {
+            return;
+        }
+        if(mode == 0) {
+            mode = 1;
+            int balance = DatabaseHandler.getBalance(accountNumber);
+            jTextField1.setText(Integer.toString(balance));
+            jLabel1.setText("Үлдэгдэл");
+            jLabel2.setText("");
+            jLabel3.setText("");
+            jLabel4.setText("");
+            jLabel5.setText("Буцах");
+            return;
+        }
     }//GEN-LAST:event_jButton16ActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
@@ -463,16 +499,36 @@ public class AtmView extends javax.swing.JFrame {
                     jLabel1.setText("PIN:");
                     jTextField1.setText("");
                     jLabel6.setText("");
+                    return;
                 }
             } else {
                 jLabel6.setText("Дансны дугаар олдсонгүй");
+                return;
             }
         }
         
         // Validate Pin
         if(pin.length() == 0) {
             if(value.length() == 4 && DataHandler.isFullyInteger(value)) {
-                
+                boolean valid = DatabaseHandler.validatePin(accountNumber, value);
+                if(valid) {
+                    pin = value;
+                    jLabel1.setText("Та юу хийх вэ?:");
+                    jTextField1.setText("");
+                    jLabel6.setText("");
+                    jLabel2.setText("Үлдэгдэл шалгах");
+                    jLabel3.setText("Орлого хийх");
+                    jLabel4.setText("Шилжүүлэг хийх");
+                    jLabel5.setText("Бэлэн мөнгө авах");
+                    mode = 0;
+                    return;
+                } else {
+                    jLabel6.setText("PIN буруу байна");
+                    return;
+                }
+            } else {
+                jLabel6.setText("PIN буруу байна");
+                return;
             }
         }
     }//GEN-LAST:event_jButton19ActionPerformed

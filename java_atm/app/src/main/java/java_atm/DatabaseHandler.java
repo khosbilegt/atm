@@ -67,6 +67,67 @@ public class DatabaseHandler {
         return false;
     }
     
+    public static boolean validatePin(String accountNumber, String pin) {
+        Connection conn = null;
+        Statement stmt = null;
+        int valid = 0;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM `Account`\n WHERE AccountNo=";
+            sql += "'" + accountNumber + "'AND Pin='" + pin + "';";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                valid++;
+            }
+            
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        if(valid > 0) {
+            return true;
+        }
+        return false;
+    }
+        
+    public static int getBalance(String accountNo) {
+        Connection conn = null;
+        Statement stmt = null;
+        int balance = 0;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM `Account`\n WHERE AccountNo=";
+            sql += "'" + accountNo + "';";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                balance = rs.getInt("Balance");
+            }
+            
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return balance;
+    }
+    
     public static boolean getMoney(int accountNo, int amount) {
         Connection conn = null;
         Statement stmt = null;
@@ -90,55 +151,5 @@ public class DatabaseHandler {
         return false;
     }
     
-    public static void init() {
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-            Class.forName(JDBC_DRIVER);
-            
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            // Execute a query
-            System.out.println("Creating statement...");
-            stmt = conn.createStatement();
-            String sql = "SELECT * FROM ATM";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            // Process the result set
-            while (rs.next()) {
-                int id = rs.getInt("ATMID");
-                String email = rs.getString("Location");
-
-                // Do something with the retrieved data
-                System.out.println("ID: " + id);
-                System.out.println("Location: " + email);
-            }
-
-            // Clean up
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException se) {
-            // Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            // Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            // Close resources in a finally block to ensure they are always closed
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            } // Nothing we can do
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-    }
     
 }
