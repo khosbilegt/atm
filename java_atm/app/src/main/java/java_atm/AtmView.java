@@ -3,6 +3,7 @@ package java_atm;
 public class AtmView extends javax.swing.JFrame {
 
     String accountNumber = "";
+    String targetNumber = "";
     String pin = "";
     int mode = -1;
     
@@ -438,7 +439,7 @@ public class AtmView extends javax.swing.JFrame {
             jLabel4.setText("Үргэлжлүүлэх");
             jLabel5.setText("Буцах");
         }
-        if(mode == 1 || mode == 2) {
+        if(mode > 0) {
             jLabel1.setText("Та юу хийх вэ?:");
             jTextField1.setText("");
             jLabel6.setText("");
@@ -454,6 +455,17 @@ public class AtmView extends javax.swing.JFrame {
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
         if(mode < 0) {
+            return;
+        }
+        if(mode == 0) {
+            mode = 4;
+            jLabel1.setText("Дансны дугаар");
+            jLabel2.setText("");
+            jLabel3.setText("");
+            jLabel4.setText("Үргэлжлүүлэх");
+            jLabel5.setText("Буцах");
+            jTextField1.setText("");
+            jLabel6.setText("");
             return;
         }
         if(mode == 2) {
@@ -484,12 +496,52 @@ public class AtmView extends javax.swing.JFrame {
                 jLabel3.setText("Орлого хийх");
                 jLabel4.setText("Шилжүүлэг хийх");
                 jLabel5.setText("Бэлэн мөнгө авах");
+                jLabel6.setText("");
                 mode = 0;
             } else {
                 jLabel6.setText("Үлдэгдэл хүрэлцэхгүй байна");
                 return;
             }
             return;
+        }
+        if(mode == 4) {
+            boolean result = DatabaseHandler.isAccountValid(
+                jTextField1.getText()
+            );
+            if(!result) {
+                jLabel6.setText("Данс буруу байна");
+                return;
+            } 
+            targetNumber = jTextField1.getText();
+            jLabel1.setText("Гүйлгээний хэмжээ");
+            jTextField1.setText("");
+            jLabel6.setText("");
+            mode = 5;
+            return;
+        }
+        if(mode == 5) {
+            boolean result = DatabaseHandler.withdrawMoney(
+                accountNumber, 
+                Integer.parseInt(jTextField1.getText())
+            );
+            if(result) {
+                DatabaseHandler.depositMoney(
+                    targetNumber, 
+                    Integer.parseInt(jTextField1.getText())
+                );
+                jLabel1.setText("Та юу хийх вэ?:");
+                jTextField1.setText("");
+                jLabel6.setText("");
+                jLabel2.setText("Үлдэгдэл шалгах");
+                jLabel3.setText("Орлого хийх");
+                jLabel4.setText("Шилжүүлэг хийх");
+                jLabel5.setText("Бэлэн мөнгө авах");
+                jLabel6.setText("");
+                mode = 0;
+            } else {
+                jLabel6.setText("Үлдэгдэл хүрэлцэхгүй байна");
+                return;
+            }
         }
     }//GEN-LAST:event_jButton14ActionPerformed
 
