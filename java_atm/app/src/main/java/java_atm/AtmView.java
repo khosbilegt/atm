@@ -430,7 +430,15 @@ public class AtmView extends javax.swing.JFrame {
         if(mode < 0) {
             return;
         }
-        if(mode == 1) {
+        if(mode == 0) {
+            mode = 3;
+            jLabel1.setText("Зарлагын хэмжээ");
+            jLabel2.setText("");
+            jLabel3.setText("");
+            jLabel4.setText("Үргэлжлүүлэх");
+            jLabel5.setText("Буцах");
+        }
+        if(mode == 1 || mode == 2) {
             jLabel1.setText("Та юу хийх вэ?:");
             jTextField1.setText("");
             jLabel6.setText("");
@@ -448,12 +456,55 @@ public class AtmView extends javax.swing.JFrame {
         if(mode < 0) {
             return;
         }
+        if(mode == 2) {
+            DatabaseHandler.depositMoney(
+                accountNumber, 
+                Integer.parseInt(jTextField1.getText())
+            );
+            jLabel1.setText("Та юу хийх вэ?:");
+            jTextField1.setText("");
+            jLabel6.setText("");
+            jLabel2.setText("Үлдэгдэл шалгах");
+            jLabel3.setText("Орлого хийх");
+            jLabel4.setText("Шилжүүлэг хийх");
+            jLabel5.setText("Бэлэн мөнгө авах");
+            mode = 0;
+            return;
+        }
+        if(mode == 3) {
+            boolean result = DatabaseHandler.withdrawMoney(
+                accountNumber, 
+                Integer.parseInt(jTextField1.getText())
+            );
+            if(result) {
+                jLabel1.setText("Та юу хийх вэ?:");
+                jTextField1.setText("");
+                jLabel6.setText("");
+                jLabel2.setText("Үлдэгдэл шалгах");
+                jLabel3.setText("Орлого хийх");
+                jLabel4.setText("Шилжүүлэг хийх");
+                jLabel5.setText("Бэлэн мөнгө авах");
+                mode = 0;
+            } else {
+                jLabel6.setText("Үлдэгдэл хүрэлцэхгүй байна");
+                return;
+            }
+            return;
+        }
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
         if(mode < 0) {
             return;
+        }
+        if(mode == 0) {
+            mode = 2;
+            jLabel1.setText("Орлогын хэмжээ");
+            jLabel2.setText("");
+            jLabel3.setText("");
+            jLabel4.setText("Үргэлжлүүлэх");
+            jLabel5.setText("Буцах");
         }
     }//GEN-LAST:event_jButton15ActionPerformed
 

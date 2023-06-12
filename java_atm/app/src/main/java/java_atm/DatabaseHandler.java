@@ -98,6 +98,62 @@ public class DatabaseHandler {
         }
         return false;
     }
+    
+    public static void depositMoney(String accountNo, int amount) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "UPDATE `Account` SET Balance = Balance + " 
+                    + Integer.toString(amount);
+            sql += " WHERE accountNo='" + accountNo + "';";
+            
+            int rs = stmt.executeUpdate(sql);
+            
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+    
+    public static boolean withdrawMoney(String accountNo, int amount) {
+        Connection conn = null;
+        Statement stmt = null;
+        
+        int balance = getBalance(accountNo);
+        
+        if(balance < amount) {
+            return false;
+        }
+        
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+            String sql = "UPDATE `Account` SET Balance = Balance - " 
+                    + Integer.toString(amount);
+            sql += " WHERE accountNo='" + accountNo + "';";
+            
+            int rs = stmt.executeUpdate(sql);
+            
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return true;
+    }
         
     public static int getBalance(String accountNo) {
         Connection conn = null;
